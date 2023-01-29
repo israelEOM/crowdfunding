@@ -28,8 +28,8 @@ const DisplayCampaigns = ({ title, isLoading, campaigns }) => {
           </p>
         )}
 
-        {!isLoading && campaigns.length > 0 && campaigns.map((campaign) => <FundCard 
-          key={campaign.id}
+        {!isLoading && campaigns.length > 0 && campaigns.map((campaign, key) => <FundCard 
+          key={key}
           {...campaign}
           handleClick={() => handleNavigate(campaign)}
         />) }
