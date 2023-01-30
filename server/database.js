@@ -17,7 +17,7 @@ export const getCampaigns = async () => {
 
 export const getCampaign = async (id) => {
   const [rows] = await pool.query(`
-    SELECT * 
+    SELECT campaign.*
     FROM campaign
     LEFT JOIN user
       ON user.id = campaign.userId
