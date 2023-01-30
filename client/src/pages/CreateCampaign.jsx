@@ -11,6 +11,7 @@ const CreateCampaign = () => {
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const { createCampaign } = useStateContext()
+  const [currency, setCurrency] = useState('USD')
   const [form, setForm] = useState({
     name: '',
     title: '',
@@ -20,8 +21,17 @@ const CreateCampaign = () => {
     image: ''
   })
 
+  const currencies = [
+    {name: 'Dollar', val: 'USD'},
+    {name: 'Etherium', val: 'ETH'},
+  ]
+
   const handleFormFieldChange = (fieldName, e) => {
     setForm({ ...form, [fieldName]: e.target.value })
+  }
+
+  const handleChangeCurrency = (e) => {
+    setCurrency(e.target.value)
   }
 
   const handleSubmit = async (e) => {
@@ -81,10 +91,23 @@ const CreateCampaign = () => {
         </div>
 
         <div className='flex flex-wrap gap-[40px]'>
+          <label className='flex-1 w-full flex flex-col'>
+            <span className="font-epilogue font-medium text-[14px] leading-[22px] text-[#808191] mb-[10px]">
+              Currency*
+            </span>
+            <select
+              onChange={handleChangeCurrency}
+              className="px-[15px] py-[17px] outline-none border-[1px] border-[#3a3a43] bg-transparent font-epilogue text-white text-[14px] leading-[24px] placeholder:text-[#4b5264] rounded-[10px]" 
+            >
+              {currencies.map((currency) => (
+                <option key={currency.val} value={currency.val} className='w-full'>{currency.name}</option>
+              ))}
+            </select>
+          </label>
           <FormField 
             labelName='Goal *'
-            placeholder='ETH 0.50'
-            inputType='text'
+            placeholder={`${currency} 0.50`}
+            inputType='number'
             value={form.target}
             handleChange={(e) => handleFormFieldChange('target', e)}
           />

@@ -12,12 +12,12 @@ const FundModal = ({ visible, state, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState("");
   const [nickname, setNickname] = useState("");
-  const [currency, setCurrency] = useState("USD");
+  // const [currency, setCurrency] = useState("USD");
 
-  const currencies = [
-    {name: 'Dollar', val: 'USD'},
-    {name: 'Etherium', val: 'ETH'},
-  ]
+  // const currencies = [
+  //   {name: 'Dollar', val: 'USD'},
+  //   {name: 'Etherium', val: 'ETH'},
+  // ]
 
   const handleDonate = async () => {
     setIsLoading(true);
@@ -32,9 +32,9 @@ const FundModal = ({ visible, state, onClose }) => {
     if (e.target.id === 'container') onClose()
   }
 
-  const handleChangeCurrency = (e) => {
-    setCurrency(e.target.value)
-  }
+  // const handleChangeCurrency = (e) => {
+  //   setCurrency(e.target.value)
+  // }
 
   if (!visible) return null;
 
@@ -52,7 +52,7 @@ const FundModal = ({ visible, state, onClose }) => {
             Fund the campaign
           </p>
           <div className="mt-[30px]">
-            {currency === 'ETH' &&
+            {/* {currency === 'ETH' &&
               <p className="text-[#808191] text-[12px] text-center">You must be connected to your Metamask wallet</p>
             }
             <select
@@ -62,11 +62,11 @@ const FundModal = ({ visible, state, onClose }) => {
               {currencies.map((currency) => (
                 <option key={currency.val} value={currency.val} className='w-full'>{currency.name}</option>
               ))}
-            </select>
+            </select> */}
             <input
               type="number"
-              placeholder={`${currency} ${currency === 'ETH' ? '0.1' : '1'}`}
-              step={`${currency === 'ETH' ? '0.01' : '1'}`}
+              placeholder={`${state.currency ? 'USD 1' : 'ETH 0.1'}`}
+              step={`${state.currency ? '1' : '0.01'}`}
               className="mt-[15px] w-full py-[10px] sm:px-[20px] px-[15px] outline-none border-[1px] border-[#3a3a43] bg-transparent font-epilogue text-white text-[18px] leading-[30px] placeholder:text-[#4b5264] rounded-[10px]"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
