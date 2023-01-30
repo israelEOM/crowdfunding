@@ -10,18 +10,37 @@ const pool = mysql.createPool({
   database: process.env.MYSQL_DATABASE,
 }).promise()
 
-const getCampaigns = async () => {
+export const getCampaigns = async () => {
   const [rows] = await pool.query("SELECT * FROM campaign")
   return rows[0]
 }
 
-const getCampaign = async (id) => {
+export const getCampaign = async (id) => {
   const [rows] = await pool.query(`
     SELECT * 
     FROM campaign
+    LEFT JOIN user
+      ON user.id = campaign.userId
     WHERE id = ?
   `, [id])
   return rows[0]
+}
+
+export const createCampaign = async (id, userId, title, description, deadline, target, image) => {
+  const [result] = await pool.query(`
+    INSERT INTO campaign (id, userId, title, description, deadline, target, image)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `, [id, userId, title, description, deadline, target, image])
+  const id = result.insertId
+  return getCampaign(id)
+}
+
+export const createUser = async (username, walletAddress) => {
+  const [result] = await pool.query(`
+    INSERT INTO user (username, walletAddress)
+    VALUES (?, ?)
+  `, [username, walletAddress])
+  return result.insertId
 }
 
 const campaigns = await getCampaigns()
