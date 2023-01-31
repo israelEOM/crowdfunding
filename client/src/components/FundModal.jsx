@@ -17,10 +17,10 @@ const FundModal = ({ visible, state, onClose }) => {
   const handleDonate = async () => {
     setIsLoading(true);
 
-    if (state.currency === "ETH") {
-      await donate(state.pId, amount);
-    } else {
+    if (state.currency === "USD") {
       donateLocally();
+    } else {
+      await donate(state.pId, amount);
     }
 
     navigate("/");
@@ -57,7 +57,7 @@ const FundModal = ({ visible, state, onClose }) => {
       >
         <div className="flex flex-col p-4 bg-[#1c1c24] rounded-[10px] w-[350px] border-[#3a3a43] border-[1px]">
           <p className="font-epilogue font-medium text-[20px] leading-[30px] text-center text-[#808191]">
-            Fund the campaign
+            Fund the campaign {state.currency}
           </p>
           <div className="mt-[30px]">
             {!state.currency && (
