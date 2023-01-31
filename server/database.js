@@ -15,6 +15,7 @@ export const getCampaigns = async () => {
     FROM campaign c
     LEFT JOIN user u
       ON u.id = c.userId
+    WHERE c.status = 'active'
   `)
   return rows
 }
