@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ethers } from "ethers";
 
@@ -18,10 +19,24 @@ const CampaignDetails = () => {
   const remainingDays = daysLeft(state.deadline);
 
   const fetchDonators = async () => {
-    const data = await getDonations(state.pId);
+    let data = []
+    if (address) {
+      data = await getDonations(state.pId);
+    } else {
+      data = await getDonationsLocally()
+    }
 
     setDonators(data);
   };
+
+  const getDonationsLocally = async () => {
+    const data = await axios
+      .get(`http://localhost:3000/donations/${state.pId}`)
+      .then((response) => {
+        return response.data;
+      });
+    return data;
+  }
 
   useEffect(() => {
     if (contract) fetchDonators();

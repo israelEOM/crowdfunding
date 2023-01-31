@@ -11,7 +11,7 @@ const pool = mysql.createPool({
 }).promise()
 
 export const getCampaigns = async () => {
-  const [rows] = await pool.query(`SELECT c.*, u.walletAddress AS owner
+  const [rows] = await pool.query(`SELECT c.*, c.id AS pId, u.walletAddress AS owner
     FROM campaign c
     LEFT JOIN user u
       ON u.id = c.userId
@@ -44,6 +44,43 @@ export const createUser = async (username, walletAddress) => {
     VALUES (?, ?)
   `, [username, walletAddress])
   return result.insertId
+}
+
+export const donate = async (campaignId, amount, nickname) => {
+  const campaign = await getCampaign(campaignId)
+
+  if (campaign) {
+    const status = campaign.status === 'fraud' ? 'invalid' : 'valid'
+
+    const [result] = await pool.query(`
+      INSERT INTO campaign_donation (campaignId, amount, nickname, status)
+      VALUES (?, ?, ?, ?)
+    `, [campaignId, amount, nickname, status])
+
+    const amountCollected = campaign.amountCollected + amount
+    const campaignStatus = amountCollected >= campaign.target ? 'successful' : 'active'
+
+    await pool.query(`
+      UPDATE campaign
+      SET amountCollected = ?, status = ?
+      WHERE id = ?
+    `, [amountCollected, campaignStatus, campaignId])
+
+    return result.insertId
+  }
+
+  return null
+}
+
+export const getDonations = async (campaignId) => {
+  const [rows] = await pool.query(`
+    SELECT cd.amount AS donation, cd.nickname AS donator
+    FROM campaign_donation cd
+    LEFT JOIN campaign c
+      ON c.id = cd.campaignId
+    WHERE c.id = ?
+  `, [campaignId])
+  return rows
 }
 
 // const campaigns = await getCampaigns()

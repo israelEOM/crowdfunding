@@ -30,7 +30,7 @@ const Navbar = () => {
           styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
           handleClick={() => {
             if (address) navigate('create-campaign')
-            else handleConnect()
+            else connect()
           }}
         />
 
@@ -78,7 +78,7 @@ const Navbar = () => {
               styles={address ? 'bg-[#1dc071]' : 'bg-[#8c6dfd]'}
               handleClick={() => {
                 if (address) navigate('create-campaign')
-                else handleConnect()
+                else connect()
               }}
             />
           </div>

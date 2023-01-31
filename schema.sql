@@ -25,6 +25,7 @@ CREATE TABLE campaign (
 
 CREATE TABLE campaign_donation (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    campaignId VARCHAR(100) NOT NULL,
     amount INTEGER NOT NULL,
     nickname VARCHAR(100) NOT NULL,
     status VARCHAR(20) NOT NULL,
@@ -33,8 +34,8 @@ CREATE TABLE campaign_donation (
 
 INSERT INTO user (username, walletAddress)
 VALUES
-('Israel Medeiros', '0x932E7DAf3dF6513759a88bcA6c383cD19E05DDd4'),
-('Nathiellen Oliveira', '0xa4e12eE4271e098364471b2D6E6aC94a35AE7a44');
+('israel.eom', '0x932E7DAf3dF6513759a88bcA6c383cD19E05DDd4'),
+('nath.oliveira', '0xa4e12eE4271e098364471b2D6E6aC94a35AE7a44');
 
 INSERT INTO campaign (id, userId, title, description, deadline, target, image)
 VALUES
@@ -48,3 +49,10 @@ VALUES
 (md5('Campaign Test 8'), 2, 'Campaign Test 8', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 1701763200000, 21000, 'https://media.istockphoto.com/id/1219980553/photo/online-news-on-a-smartphone-and-laptop-woman-reading-news-or-articles-in-a-mobile-phone.jpg?s=612x612&w=0&k=20&c=QodY8pXN5DbLs3-FhwWhhYKnsOE4Iixky_SwdGitwnQ='),
 (md5('Campaign Test 9'), 2, 'Campaign Test 9', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 1703491200000, 3000000, 'https://media.istockphoto.com/id/1288092444/photo/student-using-laptop-having-online-class-with-teacher.jpg?s=612x612&w=0&k=20&c=hI_apluBFBOEzizTYeXzFd26r9Z6QyawI8_Ta9-_sDM='),
 (md5('Campaign Test 10'), 2, 'Campaign Test 10', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium', 1695625200000, 850000, 'https://media.istockphoto.com/id/1349390515/photo/paperless-workplace-idea-e-signing-electronic-signature-document-management-businessman-signs.jpg?s=612x612&w=0&k=20&c=EyQl13diegNV5DVLnb0krcAcRDhL7NiSA7IEVImZs6Q=');
+
+CREATE EVENT mark_expired
+    ON SCHEDULE EVERY 10 SECOND
+    DO UPDATE campaign
+        SET status = 'expired'
+        WHERE status = 'active' 
+        AND FROM_UNIXTIME(deadline/1000,'%Y-%m-%d %H:%i:%s') < NOW();
