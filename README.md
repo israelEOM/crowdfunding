@@ -36,7 +36,7 @@ Run the project using this example:
 ## Adding your key to the project
 - Click on the 3 dots > Accound details > Export Private Key
 - Type your password and Copy the Private Key > Done
-- Go to web3 and create a new .env file
+- Go to web3/ folder and create a new .env file
 - Set:
 ```bash
     PRIVATE_KEY={your_private_key}
