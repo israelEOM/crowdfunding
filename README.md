@@ -24,7 +24,7 @@ Run the project using this example:
 
 ## Install Metatask to use your Crypto Wallet
 - https://metamask.io/
-- Create youy wallet (Pin the add on in your browser)
+- Create your wallet (Pin the add on in your browser)
 - Go to Etherium Mainnet > Show/hide test networks
 - Toggle On 'Show test networks'
 
