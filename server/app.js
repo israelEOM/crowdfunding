@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 
-import { getCampaign, getCampaigns, createCampaign, createUser, donate, getDonations } from './database.js'
+import { getCampaign, getCampaigns, createCampaign, createUser, donate, getDonations, markCampaignAsFraud } from './database.js'
 
 const app = express()
 app.use(express.json())
@@ -43,6 +43,12 @@ app.get("/donations/:id", async (req, res) => {
   const id = req.params.id
   const donations = await getDonations(id)
   res.send(donations)
+})
+
+app.get("/mark-fraud/:id", async (req, res) => {
+  const id = req.params.id
+  const campaign = await markCampaignAsFraud(id)
+  res.send(campaign)
 })
 
 app.use((err, req, res, next) => {

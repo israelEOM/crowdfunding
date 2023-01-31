@@ -84,6 +84,36 @@ export const getDonations = async (campaignId) => {
   return rows
 }
 
+export const markCampaignAsFraud = async (campaignId) => {
+  const campaign = await getCampaign(campaignId)
+
+  if (campaign) {
+    await pool.query(`
+      UPDATE user
+      SET status = ?
+      WHERE id = ?
+    `, ['fraud', campaign.userId])
+
+    await pool.query(`
+      UPDATE campaign
+      SET status = ?
+      WHERE userId = ?
+    `, ['fraud', campaign.userId])
+
+    const [result] = await pool.query(`
+      UPDATE campaign_donation cd
+      INNER JOIN campaign c
+        ON c.id = cd.campaignId AND c.status = 'fraud'
+      SET cd.status = ?
+      WHERE c.userId = ?
+    `, ['fraud', campaign.userId])
+
+    return result
+  }
+
+  return null
+}
+
 // const campaigns = await getCampaigns()
 // const campaign = await getCampaign('537d24ed5a92d118aef5cda20107420b')
 // console.log(campaigns)
